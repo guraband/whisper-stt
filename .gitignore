@@ -1,2 +1,4 @@
 # Ignore uploads folder
 uploads/
+resources/wav/
+mlx_models/

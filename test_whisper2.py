@@ -1,14 +1,10 @@
 import whisper
-import warnings
 import time
+from lightning_whisper_mlx import LightningWhisperMLX
 
-# 경고 메시지 억제
-warnings.filterwarnings("ignore", category=UserWarning,
-                        message="FP16 is not supported on CPU; using FP32 instead")
-
+# whisper 대신 LightningWhisperMLX를 사용하여 테스트
 try:
-    # 모델 로드
-    model = whisper.load_model("small")
+    whisper = LightningWhisperMLX(model="small", batch_size=12, quant=None)
 
     audio_files = [
         "./resources/wav/hello.mp3",
@@ -22,15 +18,14 @@ try:
     for audio_file in audio_files:
         start_time = time.time()
 
-        # 음성 파일을 텍스트로 변환 (언어: 한국어)
-        # result = model.transcribe("./resources/wav/reservation.mp3", language="ko")
-        result = model.transcribe(audio_file, language="ko")
+        result = whisper.transcribe(audio_file, language="ko")
 
         end_time = time.time()
 
         processing_time = end_time - start_time
 
         # 결과 출력
+        # print audio file name strip off the path
         print(f"Audio file: {audio_file.split('/')[-1]}")
         print(result["text"])
         print(f"Processing time: {processing_time:.2f} seconds")
