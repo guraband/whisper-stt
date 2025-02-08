@@ -39,14 +39,21 @@ recordButton.addEventListener('click', () => {
                 const formData = new FormData();
                 formData.append('file', audioBlob, 'audio.wav');
 
+                const selectedModel = document.querySelector('input[name="model"]:checked').value;
+                formData.append('model_type', selectedModel);
+
+                transcription.textContent = ''; // Clear previous result
                 showLoading();
+                const startTime = performance.now();
                 fetch('http://localhost:8000/transcribe', {
                     method: 'POST',
                     body: formData
                 })
                     .then(response => response.json())
                     .then(data => {
-                        transcription.textContent = data.text;
+                        const endTime = performance.now();
+                        const processingTime = ((endTime - startTime) / 1000).toFixed(2);
+                        transcription.textContent = `결과: ${data.text}\n 처리시간: ${processingTime} seconds`;
                     })
                     .catch(error => {
                         console.error('Error:', error);

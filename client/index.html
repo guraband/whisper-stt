@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whisper STT</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,6 +53,14 @@
 
 <body>
     <h1>Whisper STT</h1>
+    <div>
+        <label>
+            <input type="radio" name="model" value="whisper" checked> Whisper
+        </label>
+        <label>
+            <input type="radio" name="model" value="lightning"> Lightning
+        </label>
+    </div>
     <button id="recordButton">Start Recording</button>
     <button id="stopButton" disabled>Stop Recording</button>
     <canvas id="visualizer" width="300" height="50"></canvas>
