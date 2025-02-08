@@ -13,7 +13,7 @@ let analyser;
 let dataArray;
 let bufferLength;
 
-const SILENCE_DURATION = 1000; // 3 seconds
+const SILENCE_DURATION = 2000; // 2 seconds
 const SILENCE_THRESHOLD = 1; // Threshold for detecting silence
 
 recordButton.addEventListener('click', () => {
