@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, Form
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import whisper
 from lightning_whisper_mlx import LightningWhisperMLX
@@ -9,6 +9,9 @@ import os
 import time
 import aiofiles
 import uuid
+import similarity
+import random
+import json
 
 app = FastAPI()
 
@@ -33,10 +36,16 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 @app.post("/transcribe")
-async def transcribe(file: UploadFile = File(...), model_type: str = Form(...), language: str = Form(...)):
+async def transcribe(
+    file: UploadFile = File(...), 
+    model_type: str = Form('lightning'), 
+    language: str = Form('en'),
+    sentence_id: int = Form(...)
+):
     logging.info(f"Received file: {file.filename}")
     logging.info(f"Model: {model_type}")
     logging.info(f"Language: {language}")
+    logging.info(f"Sentence ID: {sentence_id}")
 
     # Generate a unique file name using UUID
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
@@ -63,7 +72,36 @@ async def transcribe(file: UploadFile = File(...), model_type: str = Form(...), 
     logging.info(f"Transcription result: {result}")
     logging.info(f"Processing time: {processing_time:.2f} seconds")
 
-    return JSONResponse(content={"text": result["text"]})
+    # Find the original sentence text
+    with open(os.path.join(os.path.dirname(__file__), "../resources/json/sentence.json"), "r") as f:
+        sentences = json.load(f)
+    original_sentence = next((s['text'] for s in sentences if s['id'] == sentence_id), "Unknown sentence")
+
+    # Calculate similarity score
+    similarity_score = similarity.calculate_similarity(result["text"], original_sentence)
+
+    print(f"Original sentence: {original_sentence}")
+    print(f"Transcribed text: {result['text']}")
+    print(f"Similarity score: {similarity_score}")
+
+    return JSONResponse(content={
+        "text": result["text"], 
+        "original_sentence": original_sentence,
+        "similarity_score": similarity_score
+    })
+
+
+@app.get("/random_sentence")
+async def random_sentence():
+    with open(os.path.join(os.path.dirname(__file__), "../resources/json/sentence.json"), "r") as f:
+        sentences = json.load(f)
+    sentence = random.choice(sentences)
+    file_path = os.path.join(os.path.dirname(__file__), "../resources/sentences", sentence["file"])
+    return JSONResponse(content={"sentence": sentence, "file_path": file_path})
+
+@app.get("/play_audio")
+async def play_audio(file_path: str):
+    return FileResponse(file_path)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

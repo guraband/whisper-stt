@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PronunPractice</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        #random-sentence {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #visualizer {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #result p {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+
+        #similarity-score {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #007BFF;
+            animation: pulse 1s infinite;
+        }
+
+        #success-message {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #28a745;
+            animation: pulse 1s infinite;
+        }
+
+        #loading {
+            display: none;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>PronunPractice</h1>
+    <div id="random-sentence">
+        <h2>Practice Sentence:</h2>
+        <p id="sentence-text" style="display: none;"></p>
+        <audio id="sentence-audio" controls></audio>
+    </div>
+    <div>
+        <button id="listen-button" style="font-size: 1.2em; padding: 8px 16px;">Listen 🎧</button>
+        <button id="try-button" style="font-size: 1.2em; padding: 8px 16px;">Try 🎤</button>
+    </div>
+    <br>
+    <div>
+        <button id="show-text-button" style="font-size: 1.2em; padding: 8px 16px;">Show Text 📜</button>
+        <button id="next-button" style="font-size: 1.2em; padding: 8px 16px;">Next ➡️</button>
+    </div>
+    <canvas id="visualizer" width="300" height="50"></canvas>
+    <div id="result">
+        <p id="transcription-result"></p>
+        <p id="similarity-score"></p>
+        <p id="success-message"></p>
+    </div>
+    <div id="loading">Processing...</div>
+    <script src="main.js"></script>
+</body>
+
+</html>
