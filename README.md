@@ -1,15 +1,17 @@
-### 가상환경 생성
-python -m venv venv
+### 가상환경 생성 (TTS가 파이썬 3.12 미만에서 실행되어 가상환경 설정을 바꿈)
+pyenv virtualenv 3.11.10 venv
 
-### 가상환경 활성화
-source venv/bin/activate
-
-### alias 설정
+### 가상환경 활성화 & alias 설정
+```sh
+pyenv activate venv
 alias python=python3
 alias pip=pip3
+```
 
 ### 가상환경 비활성화
-deactivate
+```sh
+pyenv deactivate
+```
 
 ### requirements.txt 생성
 ```sh
@@ -54,7 +56,15 @@ result = model.transcribe("audio.mp3")
 print(result["text"])
 ```
 
-### coreML 설치
+### Coqui TTS 설치
 ```sh
-pip install coremltools
+# Coqui TTS 저장소 클론
+git clone https://github.com/coqui-ai/TTS
+
+# 디렉토리로 이동
+cd TTS
+
+# 필요한 패키지 설치
+pip install -e .[all,dev,notebooks]
 ```
+

@@ -1,4 +1,6 @@
 # Ignore uploads folder
 uploads/
 resources/wav/
+resources/sentences/
 mlx_models/
+TTS/

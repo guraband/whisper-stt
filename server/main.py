@@ -33,9 +33,10 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 @app.post("/transcribe")
-async def transcribe(file: UploadFile = File(...), model_type: str = Form(...)):
+async def transcribe(file: UploadFile = File(...), model_type: str = Form(...), language: str = Form(...)):
     logging.info(f"Received file: {file.filename}")
     logging.info(f"Model: {model_type}")
+    logging.info(f"Language: {language}")
 
     # Generate a unique file name using UUID
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
@@ -51,10 +52,10 @@ async def transcribe(file: UploadFile = File(...), model_type: str = Form(...)):
 
     if model_type == "whisper":
         logging.info(f"Model1: {model_type}")
-        result = model.transcribe(file_location, language="ko")
+        result = model.transcribe(file_location, language=language)
     else:
         logging.info(f"Model2: {model_type}")
-        result = model2.transcribe(file_location, language="ko")
+        result = model2.transcribe(file_location, language=language)
 
     end_time = time.time()
 

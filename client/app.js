@@ -42,6 +42,9 @@ recordButton.addEventListener('click', () => {
                 const selectedModel = document.querySelector('input[name="model"]:checked').value;
                 formData.append('model_type', selectedModel);
 
+                const selectedLanguage = document.querySelector('input[name="language"]:checked').value;
+                formData.append('language', selectedLanguage);
+
                 transcription.textContent = ''; // Clear previous result
                 showLoading();
                 const startTime = performance.now();
